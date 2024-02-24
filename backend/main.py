@@ -1,12 +1,16 @@
 from flask import Flask,jsonify,request
+from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
 
-
 app = Flask(__name__)
 
-users = ['placeholder]']
+# load secrets
+
+load_dotenv()
+
+databaseUri = os.getenv('POSTGRES_ENGINE')
 
 # initialize flask-sqlalchemy
 
@@ -17,7 +21,12 @@ class Base(DeclarativeBase):
 
 db = SQLAlchemy(model_class=Base)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('POSTGRES_ENGINE')
+
+app.config['SQLALCHEMY_DATABASE_URI'] = databaseUri
+
+db.init_app(app)
+
+metadata = db.MetaData()
 
 
 @app.route('/')
@@ -28,13 +37,19 @@ def main():
 @app.route('/users/', methods=['GET'])
 def getUsers():
 
-    return jsonify({'users': users})
+    users = db.Table('users', metadata)
+
+    print(users, 'bruh moment')
+
+    return jsonify({'users': users.columns.keys()})
 
 
 @app.route('/users/create', methods=['POST'])
 def createUser():
 
-    return jsonify({"users": users})
+    users = db.Table('users', metadata)
+
+    return jsonify({"users": users.columns.keys()})
 
 
 if __name__ == '__main__':
