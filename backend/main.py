@@ -1,32 +1,20 @@
-from flask import Flask,jsonify,request
+from flask import Flask, request, jsonify
+import psycopg2
 from dotenv import load_dotenv
 import os
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase
-
-app = Flask(__name__)
-
-# load secrets
+import random
+from datetime import datetime
+# configuring database
 
 load_dotenv()
 
-databaseUri = os.getenv('POSTGRES_ENGINE')
+conn = psycopg2.connect(os.getenv('POSTGRES_ENGINE'))
 
-# initialize flask-sqlalchemy
+cur = conn.cursor()
 
+# Flask app
 
-class Base(DeclarativeBase):
-    pass
-
-
-db = SQLAlchemy(model_class=Base)
-
-
-app.config['SQLALCHEMY_DATABASE_URI'] = databaseUri
-
-db.init_app(app)
-
-metadata = db.MetaData()
+app = Flask(__name__)
 
 
 @app.route('/')
@@ -37,20 +25,58 @@ def main():
 @app.route('/users/', methods=['GET'])
 def getUsers():
 
-    users = db.Table('users', metadata)
+    cur.execute('SELECT * FROM users;')
+
+    users = cur.fetchall()
 
     print(users, 'bruh moment')
 
-    return jsonify({'users': users.columns.keys()})
+    return jsonify({'users': users})
+
+    cur.close()
 
 
 @app.route('/users/create', methods=['POST'])
 def createUser():
 
-    users = db.Table('users', metadata)
+    # defining data
+    data = request.json
 
-    return jsonify({"users": users.columns.keys()})
+    id = random.randint(0000000000, 99999999999)
+
+    emailAddress = data['emailAddress']
+
+    username = data['username']
+
+    password = data['password']
+
+    cur.execute('''
+                INSERT INTO users
+                (user_id,email_address,username,
+                first_name,last_name,password,
+                actived,signup_date)
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+                ''', (str(id),
+                      emailAddress,
+                      username,
+                      '', '',
+                      password,
+                      False,
+                      datetime.now(),
+                      ))
+
+    cur.execute(
+        'SELECT * FROM users WHERE username = (%s)',
+        (data['username'],))
+
+    returnUser = cur.fetchone()
+
+    print(len(returnUser[2]))
+
+    return jsonify({"user created": returnUser})
 
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+conn.close()
