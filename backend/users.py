@@ -35,6 +35,14 @@ def createUser():
 
     password = data['password']
 
+    # validating data
+
+    if len(username) < 8:
+        return jsonify({"error": 'username must be 8 characters long'})
+
+    if len(password) < 8:
+        return jsonify({"error": 'password must be 8 characters long'})
+
     # hashing password
 
     passwordBytes = password.encode('utf-8')
