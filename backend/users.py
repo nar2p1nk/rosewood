@@ -16,7 +16,7 @@ def getUsers():
 
     print(users, 'bruh moment')
 
-    return jsonify({'users': users})
+    return ({'users': users})
 
     cur.close()
 
@@ -25,23 +25,42 @@ def getUsers():
 def createUser():
 
     # defining data
-    data = request.json
+    user = request.json['user']
 
     id = random.randint(0000000000, 99999999999)
 
-    emailAddress = data['emailAddress']
+    emailAddress = user['emailAddress']
 
-    username = data['username']
+    username = user['username']
 
-    password = data['password']
+    password = user['password']
+
+    firstName = user['firstName']
+
+    lastName = user['lastName']
 
     # validating data
+
+    #   username
+
+    if username == '':
+        return ({"error": "username field is empty"})
 
     if len(username) < 8:
         return jsonify({"error": 'username must be 8 characters long'})
 
+    #   password
+
+    if password == '':
+        return ({"error": "password field is empty"})
+
     if len(password) < 8:
-        return jsonify({"error": 'password must be 8 characters long'})
+        return ({"error": 'password must be 8 characters long'})
+
+    #   emailAddress
+
+    if emailAddress == '':
+        return ({"error": "email field is empty"})
 
     # hashing password
 
@@ -51,6 +70,7 @@ def createUser():
 
     passwordHash = bcrypt.hashpw(passwordBytes, salt)
 
+    # inserting data into database query
     cur.execute('''
                 INSERT INTO users
                 (user_id,email_address,username,
@@ -60,15 +80,17 @@ def createUser():
                 ''', (str(id),
                       emailAddress,
                       username,
-                      '', '',
+                      firstName, lastName,
                       passwordHash,
                       False,
                       datetime.now(),
                       ))
 
+    conn.commit()
+
     cur.execute(
         'SELECT * FROM users WHERE username = (%s)',
-        (data['username'],))
+        (user['username'],))
 
     returnUser = cur.fetchone()
 
