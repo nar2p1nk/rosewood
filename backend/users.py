@@ -81,7 +81,7 @@ def createUser():
                       emailAddress,
                       username,
                       firstName, lastName,
-                      passwordHash,
+                      passwordHash.decode('utf-8'),
                       False,
                       datetime.now(),
                       ))
