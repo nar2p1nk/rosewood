@@ -1,127 +1,125 @@
-CREATE TABLE "postMediaUserTag"(
-    "userTagId" BIGINT NOT NULL,
-    "postMediaId" BIGINT NOT NULL,
-    "userTaggedId" BIGINT NOT NULL
+CREATE TABLE "post_media_user_tag"(
+    "user_tag_id" BIGINT NOT NULL,
+    "post_media_id" BIGINT NOT NULL,
+    "user_tagged_id" BIGINT NOT NULL
 );
 ALTER TABLE
-    "postMediaUserTag" ADD PRIMARY KEY("userTagId");
-CREATE INDEX "postmediausertag_postmediaid_index" ON
-    "postMediaUserTag"("postMediaId");
-CREATE INDEX "postmediausertag_usertaggedid_index" ON
-    "postMediaUserTag"("userTaggedId");
-CREATE TABLE "userActivation"(
-    "userActivationId" BIGINT NOT NULL,
-    "unactiveUserId" BIGINT NOT NULL,
-    "activationHash" CHAR(255) NOT NULL
+    "post_media_user_tag" ADD PRIMARY KEY("user_tag_id");
+CREATE INDEX "post_media_user_tag_post_media_id_index" ON
+    "post_media_user_tag"("post_media_id");
+CREATE INDEX "post_media_user_tag_user_tagged_id_index" ON
+    "post_media_user_tag"("user_tagged_id");
+CREATE TABLE "user_activation"(
+    "user_activation_id" BIGINT NOT NULL,
+    "unactive_userId" BIGINT NOT NULL,
+    "activation_hash" CHAR(255) NOT NULL
 );
 ALTER TABLE
-    "userActivation" ADD PRIMARY KEY("userActivationId");
-CREATE INDEX "useractivation_unactiveuserid_index" ON
-    "userActivation"("unactiveUserId");
+    "user_activation" ADD PRIMARY KEY("user_activation_id");
+CREATE INDEX "user_activation_unactive_userid_index" ON
+    "user_activation"("unactive_userId");
 CREATE TABLE "comment"(
-    "commentId" BIGINT NOT NULL,
-    "createdByUserId" BIGINT NOT NULL,
-    "commentPostId" BIGINT NOT NULL,
-    "createdAt" TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
-    "commentText" CHAR(255) NOT NULL,
-    "commentReplyId" BIGINT NOT NULL
+    "comment_id" BIGINT NOT NULL,
+    "created_by_user_id" BIGINT NOT NULL,
+    "comment_post_id" BIGINT NOT NULL,
+    "created_at" TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
+    "comment_text" CHAR(255) NOT NULL,
+    "comment_reply_id" BIGINT NOT NULL
 );
 ALTER TABLE
-    "comment" ADD PRIMARY KEY("commentId");
-CREATE INDEX "comment_createdbyuserid_index" ON
-    "comment"("createdByUserId");
+    "comment" ADD PRIMARY KEY("comment_id");
+CREATE INDEX "comment_created_by_user_id_index" ON
+    "comment"("created_by_user_id");
 CREATE TABLE "Friend"(
-    "friendId" BIGINT NOT NULL,
-    "followingUserId" BIGINT NOT NULL,
-    "followedByUserId" BIGINT NOT NULL,
-    "friendSince" TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL
+    "friend_id" BIGINT NOT NULL,
+    "following_user_id" BIGINT NOT NULL,
+    "followed_by_user_d" BIGINT NOT NULL,
+    "friend_since" TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL
 );
 ALTER TABLE
-    "Friend" ADD PRIMARY KEY("friendId");
-CREATE INDEX "friend_followinguserid_index" ON
-    "Friend"("followingUserId");
-CREATE INDEX "friend_followedbyuserid_index" ON
-    "Friend"("followedByUserId");
+    "Friend" ADD PRIMARY KEY("friend_id");
+CREATE INDEX "friend_following_user_id_index" ON
+    "Friend"("following_user_id");
+CREATE INDEX "friend_followed_by_user_d_index" ON
+    "Friend"("followed_by_user_d");
 CREATE TABLE "post"(
-    "postId" BIGINT NOT NULL,
+    "post_id" BIGINT NOT NULL,
     "Title" CHAR(255) NOT NULL,
-    "createByUserId" BIGINT NOT NULL,
-    "createdAt" TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
+    "create_by_user_id" BIGINT NOT NULL,
+    "created_at" TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
     "caption" CHAR(255) NOT NULL
 );
 ALTER TABLE
-    "post" ADD PRIMARY KEY("postId");
-CREATE INDEX "post_createbyuserid_index" ON
-    "post"("createByUserId");
-CREATE TABLE "friendRequest"(
-    "friendRequestId" BIGINT NOT NULL,
-    "fromUserId" BIGINT NOT NULL,
-    "toUserId" BIGINT NOT NULL,
-    "requestDate" TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL
+    "post" ADD PRIMARY KEY("post_id");
+CREATE INDEX "post_create_by_user_id_index" ON
+    "post"("create_by_user_id");
+CREATE TABLE "friend_request"(
+    "friend_request_id" BIGINT NOT NULL,
+    "from_user_id" BIGINT NOT NULL,
+    "to_user_id" BIGINT NOT NULL,
+    "request_date" TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL
 );
 ALTER TABLE
-    "friendRequest" ADD PRIMARY KEY("friendRequestId");
-CREATE INDEX "friendrequest_fromuserid_index" ON
-    "friendRequest"("fromUserId");
-CREATE INDEX "friendrequest_touserid_index" ON
-    "friendRequest"("toUserId");
+    "friend_request" ADD PRIMARY KEY("friend_request_id");
+CREATE INDEX "friend_request_from_user_id_index" ON
+    "friend_request"("from_user_id");
+CREATE INDEX "friend_request_to_user_id_index" ON
+    "friend_request"("to_user_id");
 CREATE TABLE "reaction"(
-    "reactionId" BIGINT NOT NULL,
-    "reactionUserId" BIGINT NOT NULL,
-    "reactionPostId" BIGINT NOT NULL,
+    "reaction_id" BIGINT NOT NULL,
+    "reaction_user_id" BIGINT NOT NULL,
+    "reaction_post_id" BIGINT NOT NULL,
     "liked" BOOLEAN NOT NULL
 );
 ALTER TABLE
-    "reaction" ADD PRIMARY KEY("reactionId");
-CREATE INDEX "reaction_reactionuserid_index" ON
-    "reaction"("reactionUserId");
-CREATE INDEX "reaction_reactionpostid_index" ON
-    "reaction"("reactionPostId");
-CREATE TABLE "postMedia"(
+    "reaction" ADD PRIMARY KEY("reaction_id");
+CREATE INDEX "reaction_reaction_user_id_index" ON
+    "reaction"("reaction_user_id");
+CREATE INDEX "reaction_reaction_post_id_index" ON
+    "reaction"("reaction_post_id");
+CREATE TABLE "post_media"(
     "id" BIGINT NOT NULL,
-    "postId" BIGINT NOT NULL,
-    "mediaUri" CHAR(255) NOT NULL,
-    "mediaPosition" CHAR(255) NOT NULL
+    "post_id" BIGINT NOT NULL,
+    "media_uri" CHAR(255) NOT NULL,
+    "media_position" CHAR(255) NOT NULL
 );
 ALTER TABLE
-    "postMedia" ADD PRIMARY KEY("id");
+    "post_media" ADD PRIMARY KEY("id");
 CREATE TABLE "users"(
-    "userId" BIGINT NOT NULL,
-    "emailAddress" CHAR(255) NOT NULL,
+    "user_id" BIGINT NOT NULL,
+    "email_address" CHAR(255) NOT NULL,
     "username" CHAR(255) NOT NULL,
-    "firstName" CHAR(255) NOT NULL,
-    "lastName" CHAR(255) NOT NULL,
     "password" CHAR(255) NOT NULL,
     "actived" BOOLEAN NOT NULL,
-    "signupDate" TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL
+    "signup_date" TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL
 );
 ALTER TABLE
-    "users" ADD PRIMARY KEY("userId");
+    "users" ADD PRIMARY KEY("user_id");
 ALTER TABLE
-    "Friend" ADD CONSTRAINT "friend_followedbyuserid_foreign" FOREIGN KEY("followedByUserId") REFERENCES "users"("userId");
+    "Friend" ADD CONSTRAINT "friend_followed_by_user_d_foreign" FOREIGN KEY("followed_by_user_d") REFERENCES "users"("user_id");
 ALTER TABLE
-    "reaction" ADD CONSTRAINT "reaction_reactionuserid_foreign" FOREIGN KEY("reactionUserId") REFERENCES "users"("userId");
+    "reaction" ADD CONSTRAINT "reaction_reaction_user_id_foreign" FOREIGN KEY("reaction_user_id") REFERENCES "users"("user_id");
 ALTER TABLE
-    "postMediaUserTag" ADD CONSTRAINT "postmediausertag_usertaggedid_foreign" FOREIGN KEY("userTaggedId") REFERENCES "users"("userId");
+    "post_media_user_tag" ADD CONSTRAINT "post_media_user_tag_user_tagged_id_foreign" FOREIGN KEY("user_tagged_id") REFERENCES "users"("user_id");
 ALTER TABLE
-    "comment" ADD CONSTRAINT "comment_commentreplyid_foreign" FOREIGN KEY("commentReplyId") REFERENCES "comment"("commentId");
+    "comment" ADD CONSTRAINT "comment_comment_reply_id_foreign" FOREIGN KEY("comment_reply_id") REFERENCES "comment"("comment_id");
 ALTER TABLE
-    "userActivation" ADD CONSTRAINT "useractivation_unactiveuserid_foreign" FOREIGN KEY("unactiveUserId") REFERENCES "users"("userId");
+    "user_activation" ADD CONSTRAINT "user_activation_unactive_userid_foreign" FOREIGN KEY("unactive_userId") REFERENCES "users"("user_id");
 ALTER TABLE
-    "comment" ADD CONSTRAINT "comment_commentpostid_foreign" FOREIGN KEY("commentPostId") REFERENCES "post"("postId");
+    "comment" ADD CONSTRAINT "comment_comment_post_id_foreign" FOREIGN KEY("comment_post_id") REFERENCES "post"("post_id");
 ALTER TABLE
-    "Friend" ADD CONSTRAINT "friend_followinguserid_foreign" FOREIGN KEY("followingUserId") REFERENCES "users"("userId");
+    "Friend" ADD CONSTRAINT "friend_following_user_id_foreign" FOREIGN KEY("following_user_id") REFERENCES "users"("user_id");
 ALTER TABLE
-    "post" ADD CONSTRAINT "post_createbyuserid_foreign" FOREIGN KEY("createByUserId") REFERENCES "users"("userId");
+    "post" ADD CONSTRAINT "post_create_by_user_id_foreign" FOREIGN KEY("create_by_user_id") REFERENCES "users"("user_id");
 ALTER TABLE
-    "friendRequest" ADD CONSTRAINT "friendrequest_touserid_foreign" FOREIGN KEY("toUserId") REFERENCES "users"("userId");
+    "friend_request" ADD CONSTRAINT "friend_request_to_user_id_foreign" FOREIGN KEY("to_user_id") REFERENCES "users"("user_id");
 ALTER TABLE
-    "postMediaUserTag" ADD CONSTRAINT "postmediausertag_postmediaid_foreign" FOREIGN KEY("postMediaId") REFERENCES "postMedia"("id");
+    "post_media_user_tag" ADD CONSTRAINT "post_media_user_tag_post_media_id_foreign" FOREIGN KEY("post_media_id") REFERENCES "post_media"("id");
 ALTER TABLE
-    "postMedia" ADD CONSTRAINT "postmedia_postid_foreign" FOREIGN KEY("postId") REFERENCES "post"("postId");
+    "post_media" ADD CONSTRAINT "post_media_post_id_foreign" FOREIGN KEY("post_id") REFERENCES "post"("post_id");
 ALTER TABLE
-    "comment" ADD CONSTRAINT "comment_createdbyuserid_foreign" FOREIGN KEY("createdByUserId") REFERENCES "users"("userId");
+    "comment" ADD CONSTRAINT "comment_created_by_user_id_foreign" FOREIGN KEY("created_by_user_id") REFERENCES "users"("user_id");
 ALTER TABLE
-    "reaction" ADD CONSTRAINT "reaction_reactionpostid_foreign" FOREIGN KEY("reactionPostId") REFERENCES "post"("postId");
+    "reaction" ADD CONSTRAINT "reaction_reaction_post_id_foreign" FOREIGN KEY("reaction_post_id") REFERENCES "post"("post_id");
 ALTER TABLE
-    "friendRequest" ADD CONSTRAINT "friendrequest_fromuserid_foreign" FOREIGN KEY("fromUserId") REFERENCES "users"("userId");
+    "friend_request" ADD CONSTRAINT "friend_request_from_user_id_foreign" FOREIGN KEY("from_user_id") REFERENCES "users"("user_id");
