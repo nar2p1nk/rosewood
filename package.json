@@ -1,23 +1,15 @@
 {
   "name": "rosewood",
   "version": "1.0.0",
-  "description": "fullstack social media app made in vue and express",
-  "main": "main.js",
+  "description": "",
+  "main": "main.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nar2p1nk/rosewood.git"
-  },
-  "author": "nar2p1nk",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/nar2p1nk/rosewood/issues"
-  },
-  "homepage": "https://github.com/nar2p1nk/rosewood#readme",
   "dependencies": {
-    "@types/node": "^20.12.11",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "express": "^4.19.2",
@@ -25,12 +17,18 @@
     "morgan": "^1.10.0",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
-    "prisma": "^5.13.0",
+    "prisma": "^5.14.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
-    "@types/express": "^4.17.21"
+    "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.12",
+    "@types/supertest": "^6.0.2",
+    "jest": "^29.7.0",
+    "superagent": "^9.0.2",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.1.2"
   }
 }
