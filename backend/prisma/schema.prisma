@@ -8,113 +8,97 @@ datasource db {
 }
 
 model Friend {
-  friend_id                              BigInt   @id
-  following_user_id                      BigInt
-  followed_by_user_d                     BigInt
+  friend_id                              String   @unique(map: "friend_friend_id_unique") @db.VarChar(255)
+  following_user_id                      String   @unique(map: "friend_following_user_id_unique") @db.VarChar(255)
+  followed_by_user_d                     String   @unique(map: "friend_followed_by_user_d_unique") @db.VarChar(255)
   friend_since                           DateTime @db.Timestamp(0)
   users_Friend_followed_by_user_dTousers users    @relation("Friend_followed_by_user_dTousers", fields: [followed_by_user_d], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "friend_followed_by_user_d_foreign")
   users_Friend_following_user_idTousers  users    @relation("Friend_following_user_idTousers", fields: [following_user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "friend_following_user_id_foreign")
-
-  @@index([followed_by_user_d], map: "friend_followed_by_user_d_index")
-  @@index([following_user_id], map: "friend_following_user_id_index")
 }
 
 model comment {
-  comment_id         BigInt    @id
-  created_by_user_id BigInt
-  comment_post_id    BigInt
+  comment_id         String    @unique(map: "comment_comment_id_unique") @db.VarChar(255)
+  created_by_user_id String    @unique(map: "comment_created_by_user_id_unique") @db.VarChar(255)
+  comment_post_id    String    @db.VarChar(255)
   created_at         DateTime  @db.Timestamp(0)
-  comment_text       String    @db.Char(255)
-  comment_reply_id   BigInt
+  comment_text       String    @db.VarChar(255)
+  comment_reply_id   String    @db.VarChar(255)
   post               post      @relation(fields: [comment_post_id], references: [post_id], onDelete: NoAction, onUpdate: NoAction, map: "comment_comment_post_id_foreign")
   comment            comment   @relation("commentTocomment", fields: [comment_reply_id], references: [comment_id], onDelete: NoAction, onUpdate: NoAction, map: "comment_comment_reply_id_foreign")
   other_comment      comment[] @relation("commentTocomment")
   users              users     @relation(fields: [created_by_user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "comment_created_by_user_id_foreign")
-
-  @@index([created_by_user_id], map: "comment_created_by_user_id_index")
 }
 
 model friend_request {
-  friend_request_id                        BigInt   @id
-  from_user_id                             BigInt
-  to_user_id                               BigInt
+  friend_request_id                        String   @unique(map: "friend_request_friend_request_id_unique") @db.VarChar(255)
+  from_user_id                             String   @unique(map: "friend_request_from_user_id_unique") @db.VarChar(255)
+  to_user_id                               String   @unique(map: "friend_request_to_user_id_unique") @db.VarChar(255)
   request_date                             DateTime @db.Timestamp(0)
   users_friend_request_from_user_idTousers users    @relation("friend_request_from_user_idTousers", fields: [from_user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "friend_request_from_user_id_foreign")
   users_friend_request_to_user_idTousers   users    @relation("friend_request_to_user_idTousers", fields: [to_user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "friend_request_to_user_id_foreign")
-
-  @@index([from_user_id], map: "friend_request_from_user_id_index")
-  @@index([to_user_id], map: "friend_request_to_user_id_index")
 }
 
 model post {
-  post_id           BigInt       @id
-  Title             String       @db.Char(255)
-  create_by_user_id BigInt
-  created_at        DateTime     @db.Timestamp(0)
-  caption           String       @db.Char(255)
+  post_id           String      @id @db.VarChar(255)
+  Title             String      @db.VarChar(255)
+  create_by_user_id String      @db.VarChar(255)
+  created_at        DateTime    @db.Timestamp(0)
+  caption           String      @db.VarChar(255)
   comment           comment[]
-  users             users        @relation(fields: [create_by_user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "post_create_by_user_id_foreign")
-  post_media        post_media[]
-  reaction          reaction[]
+  users             users       @relation(fields: [create_by_user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "post_create_by_user_id_foreign")
+  post_media        post_media?
+  reaction          reaction?
 
   @@index([create_by_user_id], map: "post_create_by_user_id_index")
 }
 
 model post_media {
-  id                  BigInt                @id
-  post_id             BigInt
-  media_uri           String                @db.Char(255)
-  media_position      String                @db.Char(255)
-  post                post                  @relation(fields: [post_id], references: [post_id], onDelete: NoAction, onUpdate: NoAction, map: "post_media_post_id_foreign")
-  post_media_user_tag post_media_user_tag[]
+  id                  String               @unique(map: "post_media_id_unique") @db.VarChar(255)
+  post_id             String               @unique(map: "post_media_post_id_unique") @db.VarChar(255)
+  media_uri           String               @db.VarChar(255)
+  media_position      String               @db.VarChar(255)
+  post                post                 @relation(fields: [post_id], references: [post_id], onDelete: NoAction, onUpdate: NoAction, map: "post_media_post_id_foreign")
+  post_media_user_tag post_media_user_tag?
 }
 
 model post_media_user_tag {
-  user_tag_id    BigInt     @id
-  post_media_id  BigInt
-  user_tagged_id BigInt
+  user_tag_id    String     @unique(map: "post_media_user_tag_user_tag_id_unique") @db.VarChar(255)
+  post_media_id  String     @unique(map: "post_media_user_tag_post_media_id_unique") @db.VarChar(255)
+  user_tagged_id String     @unique(map: "post_media_user_tag_user_tagged_id_unique") @db.VarChar(255)
   post_media     post_media @relation(fields: [post_media_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "post_media_user_tag_post_media_id_foreign")
   users          users      @relation(fields: [user_tagged_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "post_media_user_tag_user_tagged_id_foreign")
-
-  @@index([post_media_id], map: "post_media_user_tag_post_media_id_index")
-  @@index([user_tagged_id], map: "post_media_user_tag_user_tagged_id_index")
 }
 
 model reaction {
-  reaction_id      BigInt  @id
-  reaction_user_id BigInt
-  reaction_post_id BigInt
+  reaction_id      String  @unique(map: "reaction_reaction_id_unique") @db.VarChar(255)
+  reaction_user_id String  @unique(map: "reaction_reaction_user_id_unique") @db.VarChar(255)
+  reaction_post_id String  @unique(map: "reaction_reaction_post_id_unique") @db.VarChar(255)
   liked            Boolean
   post             post    @relation(fields: [reaction_post_id], references: [post_id], onDelete: NoAction, onUpdate: NoAction, map: "reaction_reaction_post_id_foreign")
   users            users   @relation(fields: [reaction_user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "reaction_reaction_user_id_foreign")
-
-  @@index([reaction_post_id], map: "reaction_reaction_post_id_index")
-  @@index([reaction_user_id], map: "reaction_reaction_user_id_index")
 }
 
 model user_activation {
-  user_activation_id BigInt @id
-  unactive_userId    BigInt
-  activation_hash    String @db.Char(255)
+  user_activation_id String @unique(map: "user_activation_user_activation_id_unique") @db.VarChar(255)
+  unactive_userId    String @unique(map: "user_activation_unactive_userid_unique") @db.VarChar(255)
+  activation_hash    String @db.VarChar(255)
   users              users  @relation(fields: [unactive_userId], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "user_activation_unactive_userid_foreign")
-
-  @@index([unactive_userId], map: "user_activation_unactive_userid_index")
 }
 
 model users {
-  user_id                                           BigInt                @id
-  email_address                                     String                @db.Char(255)
-  username                                          String                @db.Char(255)
-  password                                          String                @db.Char(255)
+  user_id                                           String               @id @db.VarChar(255)
+  email_address                                     String               @db.VarChar(255)
+  username                                          String               @db.VarChar(255)
+  password                                          String               @db.VarChar(255)
   actived                                           Boolean
-  signup_date                                       DateTime              @db.Timestamp(0)
-  Friend_Friend_followed_by_user_dTousers           Friend[]              @relation("Friend_followed_by_user_dTousers")
-  Friend_Friend_following_user_idTousers            Friend[]              @relation("Friend_following_user_idTousers")
-  comment                                           comment[]
-  friend_request_friend_request_from_user_idTousers friend_request[]      @relation("friend_request_from_user_idTousers")
-  friend_request_friend_request_to_user_idTousers   friend_request[]      @relation("friend_request_to_user_idTousers")
+  signup_date                                       DateTime             @db.Timestamp(0)
+  Friend_Friend_followed_by_user_dTousers           Friend?              @relation("Friend_followed_by_user_dTousers")
+  Friend_Friend_following_user_idTousers            Friend?              @relation("Friend_following_user_idTousers")
+  comment                                           comment?
+  friend_request_friend_request_from_user_idTousers friend_request?      @relation("friend_request_from_user_idTousers")
+  friend_request_friend_request_to_user_idTousers   friend_request?      @relation("friend_request_to_user_idTousers")
   post                                              post[]
-  post_media_user_tag                               post_media_user_tag[]
-  reaction                                          reaction[]
-  user_activation                                   user_activation[]
+  post_media_user_tag                               post_media_user_tag?
+  reaction                                          reaction?
+  user_activation                                   user_activation?
 }
