@@ -29,17 +29,17 @@ userRouter.post('/create', async(req,res)=>{
 
     //check if username or email already exist
 
-    if(
-        await prisma.users.findFirst({where:{email_address:userData.emailAddress}}) != null
-        &&
-        await prisma.users.findFirst({where:{username:userData.username}}) != null
-    ){
-        res.status(403).json({"user":"not found"})
+    if(await prisma.users.findFirst({where:{email_address:userData.emailAddress}}) != null){
+        res.status(400).json({"err":"email is already in use"})
+        }
+
+    else if (await prisma.users.findFirst({where:{username:userData.username}}) != null){
+        res.status(400).json({'err':'username is already taken'})
     }
 
+    // create new user
+
     else{
-        
-        //create new user
         const userId = uuidv4()
         const datenow = moment().toISOString()
 
@@ -56,7 +56,7 @@ userRouter.post('/create', async(req,res)=>{
             }
         })
 
-        res.status(200).json({"all users":createdUser})
+        res.status(200).json({"status":"user created", "user":createdUser})
     }
 })
 
