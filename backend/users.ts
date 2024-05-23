@@ -7,6 +7,7 @@ import * as moment from 'moment'
 const userRouter = express.Router()
 const prisma = new PrismaClient()
 
+// get all users
 
 userRouter.get('/', async(req,res)=>{
 
@@ -15,12 +16,16 @@ userRouter.get('/', async(req,res)=>{
     res.status(200).json({'all users': allUsers})
 })
 
+// find specific user by username
+
 userRouter.get('/find',async(req,res)=>{
     const singleUser = await prisma.users.findFirst(({
         where:{username:req.body.username}
     }))
     res.status(200).json({"user":singleUser})
 })
+
+// create user
 
 userRouter.post('/create', async(req,res)=>{
 
