@@ -2,6 +2,7 @@ import * as express from 'express'
 import { PrismaClient } from '@prisma/client'
 import {v4 as uuidv4} from 'uuid'
 import * as moment from 'moment'
+import * as bcrypt from 'bcrypt'
 
 
 const userRouter = express.Router()
@@ -47,7 +48,7 @@ userRouter.post('/create', async(req,res)=>{
     else{
         const userId = uuidv4()
         const datenow = moment().toISOString()
-
+        const hashedPassword = bcrypt.hashSync(userData.password,10)
 
         const createdUser = await prisma.users.create({
             
@@ -55,7 +56,7 @@ userRouter.post('/create', async(req,res)=>{
                 user_id:userId,
                 email_address:userData.emailAddress,
                 username:userData.username,
-                password:userData.password,
+                password:hashedPassword,
                 actived:false,
                 signup_date:datenow,
             }
