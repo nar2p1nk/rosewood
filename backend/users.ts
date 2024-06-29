@@ -4,9 +4,12 @@ import {v4 as uuidv4} from 'uuid'
 import * as moment from 'moment'
 import * as bcrypt from 'bcrypt'
 
-
+// defining express Router
 const userRouter = express.Router()
+
+// defining prisma client
 const prisma = new PrismaClient()
+
 
 // get all users
 
@@ -30,10 +33,10 @@ userRouter.get('/find',async(req,res)=>{
 
 userRouter.post('/create', async(req,res)=>{
 
-    // get data from json api
+    // get data from json post request
     const userData = req.body.user
 
-    //check if username or email already exist
+    //check if email or username already exist
 
     if(await prisma.users.findFirst({where:{email_address:userData.emailAddress}}) != null){
         res.status(400).json({"err":"email is already in use"})
@@ -49,6 +52,7 @@ userRouter.post('/create', async(req,res)=>{
         const userId = uuidv4()
         const datenow = moment().toISOString()
         const hashedPassword = bcrypt.hashSync(userData.password,10)
+        const activationToken = bcrypt.hashSync(userData.username,5)
 
         const createdUser = await prisma.users.create({
             
@@ -57,6 +61,7 @@ userRouter.post('/create', async(req,res)=>{
                 email_address:userData.emailAddress,
                 username:userData.username,
                 password:hashedPassword,
+                activation_token:activationToken,
                 actived:false,
                 signup_date:datenow,
             }

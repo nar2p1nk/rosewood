@@ -92,6 +92,7 @@ model users {
   password                                          String               @db.VarChar(255)
   actived                                           Boolean
   signup_date                                       DateTime             @db.Timestamp(0)
+  activation_token                                  String?              @db.VarChar(80)
   Friend_Friend_followed_by_user_dTousers           Friend?              @relation("Friend_followed_by_user_dTousers")
   Friend_Friend_following_user_idTousers            Friend?              @relation("Friend_following_user_idTousers")
   comment                                           comment?
