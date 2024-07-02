@@ -103,3 +103,9 @@ model users {
   reaction                                          reaction?
   user_activation                                   user_activation?
 }
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt   DateTime
+}
