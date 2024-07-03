@@ -30,18 +30,18 @@ ALTER TABLE
     "comment" ADD CONSTRAINT "comment_comment_id_unique" UNIQUE("comment_id");
 ALTER TABLE
     "comment" ADD CONSTRAINT "comment_created_by_user_id_unique" UNIQUE("created_by_user_id");
-CREATE TABLE "Friend"(
+CREATE TABLE "friend"(
     "friend_id" VARCHAR(255) NOT NULL,
     "following_user_id" VARCHAR(255) NOT NULL,
     "followed_by_user_d" VARCHAR(255) NOT NULL,
     "friend_since" TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL
 );
 ALTER TABLE
-    "Friend" ADD CONSTRAINT "friend_friend_id_unique" UNIQUE("friend_id");
+    "friend" ADD CONSTRAINT "friend_friend_id_unique" UNIQUE("friend_id");
 ALTER TABLE
-    "Friend" ADD CONSTRAINT "friend_following_user_id_unique" UNIQUE("following_user_id");
+    "friend" ADD CONSTRAINT "friend_following_user_id_unique" UNIQUE("following_user_id");
 ALTER TABLE
-    "Friend" ADD CONSTRAINT "friend_followed_by_user_d_unique" UNIQUE("followed_by_user_d");
+    "friend" ADD CONSTRAINT "friend_followed_by_user_d_unique" UNIQUE("followed_by_user_d");
 CREATE TABLE "post"(
     "post_id" VARCHAR(255) NOT NULL,
     "Title" VARCHAR(255) NOT NULL,
@@ -98,7 +98,7 @@ CREATE TABLE "users"(
 ALTER TABLE
     "users" ADD PRIMARY KEY("user_id");
 ALTER TABLE
-    "Friend" ADD CONSTRAINT "friend_followed_by_user_d_foreign" FOREIGN KEY("followed_by_user_d") REFERENCES "users"("user_id");
+    "friend" ADD CONSTRAINT "friend_followed_by_user_d_foreign" FOREIGN KEY("followed_by_user_d") REFERENCES "users"("user_id");
 ALTER TABLE
     "reaction" ADD CONSTRAINT "reaction_reaction_user_id_foreign" FOREIGN KEY("reaction_user_id") REFERENCES "users"("user_id");
 ALTER TABLE
@@ -110,7 +110,7 @@ ALTER TABLE
 ALTER TABLE
     "comment" ADD CONSTRAINT "comment_comment_post_id_foreign" FOREIGN KEY("comment_post_id") REFERENCES "post"("post_id");
 ALTER TABLE
-    "Friend" ADD CONSTRAINT "friend_following_user_id_foreign" FOREIGN KEY("following_user_id") REFERENCES "users"("user_id");
+    "friend" ADD CONSTRAINT "friend_following_user_id_foreign" FOREIGN KEY("following_user_id") REFERENCES "users"("user_id");
 ALTER TABLE
     "post" ADD CONSTRAINT "post_create_by_user_id_foreign" FOREIGN KEY("create_by_user_id") REFERENCES "users"("user_id");
 ALTER TABLE

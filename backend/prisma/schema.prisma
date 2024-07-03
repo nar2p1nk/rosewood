@@ -7,15 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Friend {
-  friend_id                              String   @unique(map: "friend_friend_id_unique") @db.VarChar(255)
-  following_user_id                      String   @unique(map: "friend_following_user_id_unique") @db.VarChar(255)
-  followed_by_user_d                     String   @unique(map: "friend_followed_by_user_d_unique") @db.VarChar(255)
-  friend_since                           DateTime @db.Timestamp(0)
-  users_Friend_followed_by_user_dTousers users    @relation("Friend_followed_by_user_dTousers", fields: [followed_by_user_d], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "friend_followed_by_user_d_foreign")
-  users_Friend_following_user_idTousers  users    @relation("Friend_following_user_idTousers", fields: [following_user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "friend_following_user_id_foreign")
-}
-
 model comment {
   comment_id         String    @unique(map: "comment_comment_id_unique") @db.VarChar(255)
   created_by_user_id String    @unique(map: "comment_created_by_user_id_unique") @db.VarChar(255)
@@ -27,6 +18,15 @@ model comment {
   comment            comment   @relation("commentTocomment", fields: [comment_reply_id], references: [comment_id], onDelete: NoAction, onUpdate: NoAction, map: "comment_comment_reply_id_foreign")
   other_comment      comment[] @relation("commentTocomment")
   users              users     @relation(fields: [created_by_user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "comment_created_by_user_id_foreign")
+}
+
+model friend {
+  friend_id                              String   @unique(map: "friend_friend_id_unique") @db.VarChar(255)
+  following_user_id                      String   @unique(map: "friend_following_user_id_unique") @db.VarChar(255)
+  followed_by_user_d                     String   @unique(map: "friend_followed_by_user_d_unique") @db.VarChar(255)
+  friend_since                           DateTime @db.Timestamp(0)
+  users_friend_followed_by_user_dTousers users    @relation("friend_followed_by_user_dTousers", fields: [followed_by_user_d], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "friend_followed_by_user_d_foreign")
+  users_friend_following_user_idTousers  users    @relation("friend_following_user_idTousers", fields: [following_user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "friend_following_user_id_foreign")
 }
 
 model friend_request {
@@ -93,9 +93,9 @@ model users {
   actived                                           Boolean
   signup_date                                       DateTime             @db.Timestamp(0)
   activation_token                                  String?              @db.VarChar(80)
-  Friend_Friend_followed_by_user_dTousers           Friend?              @relation("Friend_followed_by_user_dTousers")
-  Friend_Friend_following_user_idTousers            Friend?              @relation("Friend_following_user_idTousers")
   comment                                           comment?
+  friend_friend_followed_by_user_dTousers           friend?              @relation("friend_followed_by_user_dTousers")
+  friend_friend_following_user_idTousers            friend?              @relation("friend_following_user_idTousers")
   friend_request_friend_request_from_user_idTousers friend_request?      @relation("friend_request_from_user_idTousers")
   friend_request_friend_request_to_user_idTousers   friend_request?      @relation("friend_request_to_user_idTousers")
   post                                              post[]
@@ -103,9 +103,10 @@ model users {
   reaction                                          reaction?
   user_activation                                   user_activation?
 }
+
 model Session {
   id        String   @id
   sid       String   @unique
   data      String
-  expiresAt   DateTime
+  expiresAt DateTime
 }
