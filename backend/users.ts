@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 import {v4 as uuidv4} from 'uuid'
 import * as moment from 'moment'
 import * as bcrypt from 'bcrypt'
-
+import * as passport from 'passport'
 // defining express Router
 const userRouter = express.Router()
 
@@ -71,6 +71,10 @@ userRouter.post('/create', async(req,res)=>{
     }
 })
 
+userRouter.post('/login',passport.authenticate('local',{
+    successRedirect:'/',
+    failureRedirect:'/fail',
+}))
 
 
 export default userRouter
