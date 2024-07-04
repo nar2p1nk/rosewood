@@ -72,9 +72,25 @@ userRouter.post('/create', async(req,res)=>{
 })
 
 userRouter.post('/login',passport.authenticate('local',{
-    successRedirect:'/',
-    failureRedirect:'/fail',
+    successRedirect:'/user/successRedirect',
+    failureRedirect:'/user/failureRedirect',
+    failureMessage:true
 }))
 
+declare module 'express-session' {
+ interface Session {
+    messages: object;
+  }
+}
+
+userRouter.get('/successRedirect',(req,res)=>{
+    
+    res.send(req.user)
+})
+
+userRouter.get('/failureRedirect',async(req,res)=>{
+    var errMessage:any = req.session.messages
+    res.send(errMessage.pop()) 
+})
 
 export default userRouter
